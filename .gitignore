@@ -1,3 +1,7 @@
+# Project Specific
+tests/1out-lexer.txt
+.vscode
+
 # Prerequisites
 *.d
 

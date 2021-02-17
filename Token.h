@@ -1,4 +1,4 @@
-#include<bits/stdc++.h> 
+#include <iostream> 
 using namespace std; 
 
 struct token
@@ -17,7 +17,7 @@ token newToken(int a, string s, int line)
     return new_token;
 }
 
-void print_token(token temp)
+void printToken(token temp)
 {
     cout << "Token "<< temp.token_no <<", string "<< temp.lexeme <<", line number "<<temp.line_no << "\n";
 }

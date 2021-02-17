@@ -1,0 +1,19 @@
+//indented using tabs
+int fact(int n) {
+	if (n < 2)
+		return 1
+	else
+		return n*fact(n-1)
+}
+
+main() 
+{
+	int x
+  x = 1								//used spaces here instead of tab
+
+	while (x < 11) {  
+		write(x)
+		write(fact(x))    
+		x = x + 1
+	}
+}
