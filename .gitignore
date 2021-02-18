@@ -34,3 +34,5 @@ tests/1out-lexer.txt
 *.exe
 *.out
 *.app
+
+.DS_Store
