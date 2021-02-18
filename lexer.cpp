@@ -64,7 +64,8 @@ void getString(string line, int *pos, int lineNumber){
 }
 
 void getAssignmentOperator(string line, int *pos, int lineNumber){
-  cout << "handling assignment operator" << endl;
+//   cout << "handling assignment operator" << endl;
+  printToken(newToken(120, ":=", lineNumber));
   (*pos)++;
 }
 
