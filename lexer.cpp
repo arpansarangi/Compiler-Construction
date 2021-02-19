@@ -31,34 +31,85 @@ void getArithmeticOperator(string line, int *pos, int lineNumber){
 }
 
 void getRelationalOperator(string line, int *pos, int lineNumber){
-  char ch =  line[*pos]; 
-  token temp;
-  if (ch == '<'){
-    temp = newToken(123, "<", lineNumber);
-  }
-  else if (ch == '>'){
-    temp = newToken(124, ">", lineNumber);
-  }
-  else if (ch == '='){
-    (*pos)++;
-    temp = newToken(125, "==", lineNumber);
-  }
+  cout << "handling relational operator" << endl;
   (*pos)++;
-  printToken(temp);
 }
 
 void getName(string line, int *pos, int lineNumber){
   cout << "handling name   ";
   (*pos)++;
 }
-void getName(string line, int *pos, int lineNumber){
-  cout << "handling name   ";
-  (*pos)++;
-}
 
-void getNumber(string line, int *pos, int lineNumber){
-  cout << "handling number" << endl;
-  (*pos)++;
+void getNumber(string s, int *i, int line_no){
+    cout << "handling number" << endl;
+    int state = 0;
+    string cur_lexeme = "";
+    int flag = 0;
+    if(s[*i] == '-')
+    {
+        cur_lexeme += s[*i];
+        (*i)++;
+        flag = 1;
+    }
+    if(s[*i] < '0' || s[*i] > '9')
+    {
+        state = 404;
+        (*i)++;
+    }
+    if(state == 0)
+    {
+        //cout << "a " << s[*i] << "\n";
+        if(s[*i] == '0')
+            state = 1;
+        else 
+            state = 2;
+        cur_lexeme += s[*i];
+        (*i)++;
+    }
+    if(state == 1)
+    {
+        //cout << "b "<< s[*i] << "\n";
+        if(s[*i] == '.')
+        {
+            cur_lexeme += s[*i];
+            (*i)++;
+            state = 3; 
+        }
+        else
+            printToken(newToken(102, cur_lexeme, line_no)), state = 404;
+    }
+    if(state == 2)
+    {
+        //cout << "c " << s[*i] << "\n";
+        while(s[*i] >= '0' && s[*i] <= '9')
+            cur_lexeme += s[*i], (*i)++;
+        if(s[*i] == '.')
+        {
+            cur_lexeme += s[*i];
+            (*i)++;
+            state = 3;
+        }
+        else
+            printToken(newToken(102, cur_lexeme, line_no)), state = 404;
+    }
+    if(state == 3)
+    {
+        if(s[*i] < '0' || s[*i] > '9')
+            state = 404;
+        else
+        {
+            state = 4; 
+            cur_lexeme += s[*i];
+            (*i)++;
+        }
+
+    }
+    if(state == 4)
+    {
+        while(s[*i] >= '0' && s[*i] <= '9')
+            cur_lexeme += s[*i], (*i)++;
+        printToken(newToken(103, cur_lexeme, line_no)), state = 404;
+    }
 }
 
 void getString(string line, int *pos, int lineNumber){
@@ -67,7 +118,7 @@ void getString(string line, int *pos, int lineNumber){
 }
 
 void getAssignmentOperator(string line, int *pos, int lineNumber){
-  printToken(newToken(120, ":=", lineNumber));
+  cout << "handling assignment operator" << endl;
   (*pos)++;
 }
 
