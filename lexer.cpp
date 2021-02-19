@@ -183,8 +183,8 @@ void getDelimiter(string line, int *pos, int lineNumber){
 
 int main(){
   ifstream fin;
-  fin.open("tests/2in.txt");
-  freopen("tests/2out-lexer.txt","w",stdout);
+  fin.open("tests/4in.txt");
+  freopen("tests/4out-lexer.txt","w",stdout);
   string line;
   int lineNumber = 0;
   while (getline(fin, line)) { 
