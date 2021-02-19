@@ -36,15 +36,26 @@ void getArithmeticOperator(string line, int *pos, int lineNumber){
 void getRelationalOperator(string line, int *pos, int lineNumber){
   char ch =  line[*pos]; 
   token temp;
-  if (ch == '<'){
+  if (ch == '<') {
     temp = newToken(123, "<", lineNumber);
   }
-  else if (ch == '>'){
+  else if (ch == '>') {
     temp = newToken(124, ">", lineNumber);
   }
-  else if (ch == '='){
+  else if (ch == '=') {
     (*pos)++;
-    temp = newToken(125, "==", lineNumber);
+    if(line[*pos] == '=') {
+      temp = newToken(125, "==", lineNumber);
+    }
+    else if (line[*pos] == ' '){
+      error("= ", pos);
+      return;
+    }
+    else {
+      (*pos)--;
+      error("=", pos);
+      return;
+    }
   }
   (*pos)++;
   printToken(temp);
@@ -134,8 +145,19 @@ void getNumber(string s, int *i, int line_no){
 }
 
 void getAssignmentOperator(string line, int *pos, int lineNumber){
-  printToken(newToken(120, ":=", lineNumber));
   (*pos)++;
+  if (line[*pos] == '='){
+    printToken(newToken(120, ":=", lineNumber));
+  }
+  else if (line[*pos] == ' '){
+    error(": ", pos);
+    return;
+  }
+  else{
+    (*pos)--;
+    error(":", pos);
+    return;
+  }
   (*pos)++;
 }
 
@@ -161,8 +183,8 @@ void getDelimiter(string line, int *pos, int lineNumber){
 
 int main(){
   ifstream fin;
-  fin.open("tests/3in.txt");
-  freopen("tests/3out-lexer.txt","w",stdout);
+  fin.open("tests/2in.txt");
+  freopen("tests/2out-lexer.txt","w",stdout);
   string line;
   int lineNumber = 0;
   while (getline(fin, line)) { 
