@@ -20,7 +20,16 @@ void error(string lexeme, int *pos){
 
 void getComment(string line, int *pos, int lineNumber){
   // cout << "handling comment" << endl;
-  while(line[(*pos)]) (*pos)++;
+  (*pos)++;
+  if (line[*pos] == '/') {
+    while(line[(*pos)]) (*pos)++;
+  }
+  else{
+    (*pos)--;
+    error("/",pos);
+    return;
+  }
+  
 }
 
 void getArithmeticOperator(string line, int *pos, int lineNumber){
