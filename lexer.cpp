@@ -31,10 +31,26 @@ void getArithmeticOperator(string line, int *pos, int lineNumber){
 }
 
 void getRelationalOperator(string line, int *pos, int lineNumber){
-  cout << "handling relational operator" << endl;
+  char ch =  line[*pos]; 
+  token temp;
+  if (ch == '<'){
+    temp = newToken(123, "<", lineNumber);
+  }
+  else if (ch == '>'){
+    temp = newToken(124, ">", lineNumber);
+  }
+  else if (ch == '='){
+    (*pos)++;
+    temp = newToken(125, "==", lineNumber);
+  }
   (*pos)++;
+  printToken(temp);
 }
 
+void getName(string line, int *pos, int lineNumber){
+  cout << "handling name   ";
+  (*pos)++;
+}
 void getName(string line, int *pos, int lineNumber){
   cout << "handling name   ";
   (*pos)++;
@@ -51,7 +67,7 @@ void getString(string line, int *pos, int lineNumber){
 }
 
 void getAssignmentOperator(string line, int *pos, int lineNumber){
-  cout << "handling assignment operator" << endl;
+  printToken(newToken(120, ":=", lineNumber));
   (*pos)++;
 }
 
