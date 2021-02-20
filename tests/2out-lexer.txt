@@ -1,0 +1,28 @@
+Token 200, string "l", line number 1
+Lexical Error: ";" is not a part of the character set of the language, skipping...
+Token 200, string "jfskd", line number 1
+Token 120, string ":=", line number 1
+Token 200, string "r", line number 1
+Lexical Error: "_" is not a part of the character set of the language, skipping...
+Token 200, string "t982n", line number 1
+Token 112, string "*", line number 1
+Token 103, string "0.005", line number 1
+Token 111, string "+", line number 1
+Token 103, string "2.0", line number 1
+Token 207, string "if", line number 2
+Token 133, string "(", line number 2
+Token 102, string "0", line number 2
+Token 200, string "sfd", line number 2
+Token 123, string "<", line number 2
+Token 102, string "99", line number 2
+Token 134, string ")", line number 2
+Token 131, string "{", line number 2
+Lexical Error: ":" did not match any regular expression, skipping to the next character...
+Lexical Error: "=" did not match any regular expression, skipping to the next character...
+Lexical Error: "=" did not match any regular expression, skipping to the next character...
+Lexical Error: ":" did not match any regular expression, skipping to the next character...
+Token 120, string ":=", line number 3
+Lexical Error: ":" did not match any regular expression, skipping to the next character...
+Lexical Error: "=" did not match any regular expression, skipping to the next character...
+Token 102, string "9", line number 4
+Token 132, string "}", line number 5

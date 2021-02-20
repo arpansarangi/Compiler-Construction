@@ -1,13 +1,14 @@
 #include "token.h"
 #include <iostream> 
 #include <string> 
+#include <vector> 
 #include <fstream> 
 
 #define call(function) function(line, &pos, lineNumber); break
 
 using namespace std; 
 
-const string keywords[] = {"main", "void", "boolean", "int", "float", "while", "if", "and", "or", "return", "in", "out"};
+const vector <string> keywords = {"main", "void", "boolean", "int", "float", "while", "if", "and", "or", "return", "in", "out"};
 
 void error(char ch){
   cout << "Lexical Error: \"" << ch << "\" is not a part of the character set of the language, skipping..." << endl;
@@ -57,7 +58,7 @@ void getRelationalOperator(string line, int *pos, int lineNumber){
       temp = newToken(125, "==", lineNumber);
     }
     else if (line[*pos] == ' '){
-      error("= ", pos);
+      error("=", pos);
       return;
     }
     else {
@@ -71,8 +72,22 @@ void getRelationalOperator(string line, int *pos, int lineNumber){
 }
 
 void getName(string line, int *pos, int lineNumber){
-  cout << "~";
-  (*pos)++;
+  string cur_lexeme = "";
+  while(line[(*pos)] and ((line[(*pos)]>='a' and line[(*pos)]<='z') or (line[(*pos)]>='A' and line[(*pos)]<='Z') or (line[(*pos)]>='0' and line[(*pos)]<='9'))){
+    cur_lexeme += line[(*pos)];
+    (*pos)++;
+  }    
+  int variable = 1, n = keywords.size();
+  for(int i=0; i<n; i++){
+    if(cur_lexeme == keywords[i]) {
+      printToken(newToken(201+i, cur_lexeme, lineNumber));
+      variable = 0;
+      break;
+    }
+  }
+  if(variable == 1){
+    printToken(newToken(200, cur_lexeme, lineNumber));
+  }
 }
 
 void getNumber(string s, int *i, int line_no){
@@ -159,7 +174,7 @@ void getAssignmentOperator(string line, int *pos, int lineNumber){
     printToken(newToken(120, ":=", lineNumber));
   }
   else if (line[*pos] == ' '){
-    error(": ", pos);
+    error(":", pos);
     return;
   }
   else{
@@ -198,7 +213,7 @@ int main(){
   int lineNumber = 0;
   while (getline(fin, line)) { 
     lineNumber++;
-    cout << "line" << lineNumber << endl;
+    // cout << "line" << lineNumber << endl;
     int pos = 0;
     while(line[pos]){
       if((line[pos]<='9' and line[pos]>='0') or line[pos]=='-'){

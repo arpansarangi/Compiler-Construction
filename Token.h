@@ -19,5 +19,5 @@ token newToken(int a, string s, int line)
 
 void printToken(token temp)
 {
-    cout << "Token "<< temp.token_no <<", string "<< temp.lexeme <<", line number "<<temp.line_no << "\n";
+    cout << "Token "<< temp.token_no <<", string \""<< temp.lexeme <<"\", line number "<<temp.line_no << "\n";
 }
