@@ -3,7 +3,7 @@
  *  Arpan Sarangi     - 2018A7PS0195H
  *  Sheyril Agarwal   - 2017B3A70870H 
  *  Rhytham Choudhary - 2018A7PS0179H
- */
+*/
 
 #include "token.h"
 #include <iostream> 
@@ -15,7 +15,7 @@
 
 using namespace std; 
 
-const vector <string> keywords = {"main", "void", "boolean", "int", "float", "while", "if", "and", "or", "return", "in", "out"};
+const vector <string> keywords = {"main", "boolean", "int", "float", "while", "if", "and", "or", "return", "in", "out"};
 
 void error(char ch){
   cout << "Lexical Error: \"" << ch << "\" is not a part of the character set of the language, skipping..." << endl;
@@ -42,10 +42,10 @@ void getComment(string line, int *pos, int lineNumber){
 
 void getArithmeticOperator(string line, int *pos, int lineNumber){
   if(line[(*pos)] == '+') {
-    printToken(newToken(111, "+", lineNumber));
+    listOfTokens.push_back(newToken(111, "+", lineNumber));
   }
   if(line[(*pos)] == '*') {
-    printToken(newToken(112, "*", lineNumber));
+    listOfTokens.push_back(newToken(112, "*", lineNumber));
   }
   (*pos)++;
 }
@@ -75,7 +75,7 @@ void getRelationalOperator(string line, int *pos, int lineNumber){
     }
   }
   (*pos)++;
-  printToken(temp);
+  listOfTokens.push_back(temp);
 }
 
 void getName(string line, int *pos, int lineNumber){
@@ -87,13 +87,13 @@ void getName(string line, int *pos, int lineNumber){
   int variable = 1, n = keywords.size();
   for(int i=0; i<n; i++){
     if(cur_lexeme == keywords[i]) {
-      printToken(newToken(201+i, cur_lexeme, lineNumber));
+      listOfTokens.push_back(newToken(201+i, cur_lexeme, lineNumber));
       variable = 0;
       break;
     }
   }
   if(variable == 1){
-    printToken(newToken(200, cur_lexeme, lineNumber));
+    listOfTokens.push_back(newToken(200, cur_lexeme, lineNumber));
   }
 }
 
@@ -136,7 +136,7 @@ void getNumber(string s, int *i, int line_no){
       state = 3; 
     }
     else
-      printToken(newToken(102, cur_lexeme, line_no));
+      listOfTokens.push_back(newToken(102, cur_lexeme, line_no));
   }
   if(state == 2)
   {
@@ -150,7 +150,7 @@ void getNumber(string s, int *i, int line_no){
       state = 3;
     }
     else
-      printToken(newToken(102, cur_lexeme, line_no));
+      listOfTokens.push_back(newToken(102, cur_lexeme, line_no));
   }
   if(state == 3)
   {
@@ -171,14 +171,14 @@ void getNumber(string s, int *i, int line_no){
   {
     while(s[*i] >= '0' && s[*i] <= '9')
       cur_lexeme += s[*i], (*i)++;
-    printToken(newToken(103, cur_lexeme, line_no));
+    listOfTokens.push_back(newToken(103, cur_lexeme, line_no));
   }
 }
 
 void getAssignmentOperator(string line, int *pos, int lineNumber){
   (*pos)++;
   if (line[*pos] == '='){
-    printToken(newToken(120, ":=", lineNumber));
+    listOfTokens.push_back(newToken(120, ":=", lineNumber));
   }
   else if (line[*pos] == ' '){
     error(":", pos);
@@ -195,27 +195,28 @@ void getAssignmentOperator(string line, int *pos, int lineNumber){
 void getDelimiter(string line, int *pos, int lineNumber){
   // cout << "handling delimiter" << endl;
   if(line[(*pos)] == '{') {
-    printToken(newToken(131, "{", lineNumber));
+    listOfTokens.push_back(newToken(131, "{", lineNumber));
   }
   if(line[(*pos)] == '}') {
-    printToken(newToken(132, "}", lineNumber));
+    listOfTokens.push_back(newToken(132, "}", lineNumber));
   }
   if(line[(*pos)] == '(') {
-    printToken(newToken(133, "(", lineNumber));
+    listOfTokens.push_back(newToken(133, "(", lineNumber));
   }
   if(line[(*pos)] == ')') {
-    printToken(newToken(134, ")", lineNumber));
+    listOfTokens.push_back(newToken(134, ")", lineNumber));
   }
   if(line[(*pos)] == ',') {
-    printToken(newToken(135, ",", lineNumber));
+    listOfTokens.push_back(newToken(135, ",", lineNumber));
   }
   (*pos)++;
 }
 
-int main(){
+int scan(){
   ifstream fin;
+  ofstream fout;
   fin.open("tests/4in.txt");
-  freopen("tests/4out-lexer.txt","w",stdout);
+  fout.open("tests/4out-lexer.txt");
   string line;
   int lineNumber = 0;
   while (getline(fin, line)) { 
@@ -252,6 +253,12 @@ int main(){
       }
     }
   }
+
+  for(token temp: listOfTokens){
+    fout << "Token "<< temp.token_no <<", string \""<< temp.lexeme <<"\", line number "<<temp.line_no << "\n";
+  }
+
   fin.close();
+  fout.close();
   return 0;
 }

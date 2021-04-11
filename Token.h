@@ -1,4 +1,7 @@
+#ifndef TOKEN_H
+#define TOKEN_H 
 #include <iostream> 
+#include <vector>
 using namespace std; 
 
 struct token
@@ -8,7 +11,10 @@ struct token
     int line_no;
 };
 
-token newToken(int a, string s, int line)
+inline vector<token> listOfTokens;
+int scan();
+
+static token newToken(int a, string s, int line)
 {
     token new_token;
     new_token.token_no = a;
@@ -17,7 +23,4 @@ token newToken(int a, string s, int line)
     return new_token;
 }
 
-void printToken(token temp)
-{
-    cout << "Token "<< temp.token_no <<", string \""<< temp.lexeme <<"\", line number "<<temp.line_no << "\n";
-}
+#endif
