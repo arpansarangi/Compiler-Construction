@@ -1,10 +1,13 @@
-
+int randomFunction(int abcd, boolean boo){
+  abcd:=abcd+ boo
+  return abcd
+}
 
 main(){
-  int c;
-  c := func();
-  in(a);
-  d := func(a,b) + 5;
-  out(d);
+  int c1;
+  c1 := randomFunction();
+  in(abcd);
+  d4 := 5;
+  out(d4);
   ?/
 }
