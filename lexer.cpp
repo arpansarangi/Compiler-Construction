@@ -171,7 +171,7 @@ void getNumber(string s, int *i, int line_no){
   {
     while(s[*i] >= '0' && s[*i] <= '9')
       cur_lexeme += s[*i], (*i)++;
-    listOfTokens.push_back(newToken(103, cur_lexeme, line_no));
+    listOfTokens.push_back(newToken(102, cur_lexeme, line_no));
   }
 }
 
@@ -215,8 +215,8 @@ void getDelimiter(string line, int *pos, int lineNumber){
 int scan(){
   ifstream fin;
   ofstream fout;
-  fin.open("tests/4in.txt");
-  fout.open("tests/4out-lexer.txt");
+  fin.open("tests/5in.txt");
+  fout.open("tests/5out-lexer.txt");
   string line;
   int lineNumber = 0;
   while (getline(fin, line)) { 
@@ -247,6 +247,7 @@ int scan(){
           case '}':
           case ',':  call(getDelimiter);
           case '.': error(".", &pos); break;
+          case ';': listOfTokens.push_back(newToken(500, ";", lineNumber)); pos++; break;
           //some other cases
           default:   error(line[pos]); pos++; break;  //error - character is invalid
         }

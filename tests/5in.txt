@@ -1,0 +1,10 @@
+
+
+main(){
+  int c;
+  c := func();
+  in(a);
+  d := func(a,b) + 5;
+  out(d);
+  ?/
+}
