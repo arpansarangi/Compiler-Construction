@@ -6,7 +6,7 @@ using namespace std;
 
 void addOtherEntries(map<pair<string, string>, vector<string> >  &otherEntries, string variable, int token_no){
     cout << "\nCurrent variable: " << variable;
-    otherEntries[{"returnStatement", "return"}].push_back("returnStatement ::= return " + variable);
+    otherEntries[{"returnStatement", "return"}].push_back("returnStatement ::= return " + variable + " ;");
 
     otherEntries[{"NT5", "+"}].push_back("NT5 ::= arithmeticOperator " + variable);
     otherEntries[{"NT5", "*"}].push_back("NT5 ::= arithmeticOperator " + variable);

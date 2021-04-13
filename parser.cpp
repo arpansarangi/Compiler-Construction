@@ -70,12 +70,21 @@ bool parseInput(vector<string> &input, map<pair<string, string>, string> &table,
       continue;
     }
 
-
     if(s.top() == "`")  s.pop();
     if(checkIfStackEmpty(s, input, it)) return false;
 
     string line = "";
-    if(table.find({s.top(), input[it]}) == table.end()){
+    int flag = 0;
+    if(s.top() == "NT6" and tokenAlreadyAdded.find(input[it]) != tokenAlreadyAdded.end()){
+      for(int i=it; input[i]!=";" and i<end; i++){
+        if(input[i]=="("){
+          flag=1;
+          break;
+        }
+      }
+      if(flag==0) line = "NT6 ::= expression";
+    }
+    if(table.find({s.top(), input[it]}) == table.end() or flag == 1){
       string nextVariable = "";
       for(int i=it; i<end; i++){
         if(tokenAlreadyAdded.find(input[i]) != tokenAlreadyAdded.end()){
@@ -89,7 +98,7 @@ bool parseInput(vector<string> &input, map<pair<string, string>, string> &table,
       }
       for(string i: otherEntries[{s.top(), input[it]}]){
         int n = nextVariable.length(), n1 = i.length();
-        for(int j=0; j<n1-n-1; j++){
+        for(int j=0; j<n1-n; j++){
           if((i.substr(j, n+1) == " " + nextVariable) or (i.substr(j, n+1) == nextVariable + " ")){
         // for(int j=0; j<n1-n; j++){
         //     if(i.substr(j, n) == nextVariable){
@@ -124,6 +133,7 @@ bool parseInput(vector<string> &input, map<pair<string, string>, string> &table,
     }
     reverse(rhs.begin(), rhs.end());
     s.pop();
+    printStackContents(s);
     for(string toPush: rhs){
       s.push(toPush);
     }
@@ -131,9 +141,11 @@ bool parseInput(vector<string> &input, map<pair<string, string>, string> &table,
     printStackContents(s);
     if(s.top() == "`")  s.pop();
 
+    int stackChanges = 0;
     while(it < end and s.top() == input[it]){
       if(!s.empty()){
         s.pop();
+        stackChanges = 1;
         cout << endl << input[it] << " matched.\n";
         it++;
       } else {
@@ -141,6 +153,8 @@ bool parseInput(vector<string> &input, map<pair<string, string>, string> &table,
         return false;
       }
     }
+    if(stackChanges)
+      printStackContents(s);
   }
 
   if(!s.empty()){

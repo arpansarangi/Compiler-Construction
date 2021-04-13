@@ -1,6 +1,6 @@
 int randomFunction(int abcd, boolean boo){
-  abcd:=abcd+ boo
-  return abcd
+  abcd:=abcd+ boo;
+  return abcd;
 }
 
 main(){
