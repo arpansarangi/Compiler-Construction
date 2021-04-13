@@ -5,7 +5,7 @@
 using namespace std;
 
 void addOtherEntries(map<pair<string, string>, vector<string> >  &otherEntries, string variable, int token_no){
-    cout << "\nCurrent variable: " << variable;
+    // cout << "\nCurrent variable: " << variable;
     otherEntries[{"returnStatement", "return"}].push_back("returnStatement ::= return " + variable + " ;");
 
     otherEntries[{"NT5", "+"}].push_back("NT5 ::= arithmeticOperator " + variable);
@@ -30,14 +30,17 @@ void addOtherEntries(map<pair<string, string>, vector<string> >  &otherEntries, 
 void editTableForVariables(map<pair<string, string>, string> &table, string variable, int token_no){
     // cout << "\nCurrent variable: " << variable;
     table[{"statements", variable}] = "statements ::= statement NT3";
+
     table[{"statement", variable}] = "statement ::= " + variable + " := NT6";
+
+    table[{"argCallingList", variable}] = "argCallingList ::= " + variable + " NT7";
 
     table[{"NT6", variable}] = "NT6 ::= expression";
 
     table[{"expression", variable}] = "expression ::= " + variable + " NT5";
 
     if(token_no == 200) {
-        table[{"NT6", variable}] = "NT6 ::= " + variable + " ( )";
+        table[{"NT6", variable}] = "NT6 ::= " + variable + " ( argCallingList )";
         table[{"varlist", variable}] = "varlist ::= " + variable + " NT4";
     }
 }
@@ -55,12 +58,10 @@ map<pair<string, string>, string> makeTable(){
     table[{"program", "int"}] = "program ::= functions MAIN";
     table[{"program", "float"}] = "program ::= functions MAIN";
     table[{"program", "main"}] = "program ::= MAIN";
-    table[{"program", "main"}] = "program ::= MAIN";
 
     table[{"functions", "boolean"}] = "functions ::= function NT1";
     table[{"functions", "int"}] = "functions ::= function NT1";
     table[{"functions", "float"}] = "functions ::= function NT1";
-    table[{"functions", "main"}] = "S ::= program $";
 
     table[{"NT1", "boolean"}] = "NT1 ::= functions";
     table[{"NT1", "int"}] = "NT1 ::= functions";
@@ -70,6 +71,7 @@ map<pair<string, string>, string> makeTable(){
     table[{"arglist", "boolean"}] = "arglist ::= arg NT2";
     table[{"arglist", "int"}] = "arglist ::= arg NT2";
     table[{"arglist", "float"}] = "arglist ::= arg NT2";
+    table[{"arglist", ")"}] = "arglist ::= `";
 
     table[{"NT2", ")"}] = "NT2 ::= `";
     table[{"NT2", ","}] = "NT2 ::= , arglist";
@@ -101,7 +103,12 @@ map<pair<string, string>, string> makeTable(){
     table[{"statement", "out"}] = "statement ::= output";
     table[{"statement", "if"}] = "statement ::= conditional";
     table[{"statement", "while"}] = "statement ::= loop";
-    
+
+    table[{"argCallingList", ")"}] = "argCallingList ::= `";
+
+    table[{"NT7", ")"}] = "NT7 ::= `";
+    table[{"NT7", ","}] = "NT7 ::= , argCallingList";
+
     table[{"declaration", "boolean"}] = "declaration ::= type varlist";
     table[{"declaration", "int"}] = "declaration ::= type varlist";
     table[{"declaration", "float"}] = "declaration ::= type varlist";
@@ -113,7 +120,7 @@ map<pair<string, string>, string> makeTable(){
 
     table[{"NT5", ")"}] = "NT5 ::= `";
     table[{"NT5", "}"}] = "NT5 ::= `";
-    table[{"NT5", ";"}] = "NT5 ::= `";
+    table[{"NT5", "return"}] = "NT5 ::= `";
     table[{"NT5", ";"}] = "NT5 ::= `";
     table[{"NT5", "<"}] = "NT5 ::= `";
     table[{"NT5", ">"}] = "NT5 ::= `";
