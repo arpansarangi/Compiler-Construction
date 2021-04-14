@@ -2,6 +2,6 @@ main()
 {
     int a, 3;
     3 := a + 5;
-    //out(a);
-    //out(3);
+    out(a);
+    out(3);
 }

@@ -117,7 +117,7 @@ bool parseInput(vector<pair<string, int> > &input, map<pair<string, string>, str
     if(line == "")  line = table[{s.top(), input[it].first}];
     if(line == "") {
       cout << "\n ******** Syntax error 2: No corresponding entry at line number " << input[it].second << " found in the parse table for lexeme " << input[it].first << "\n";
-      cout << "Skipping this input\n";
+      cout << "Skipping this input\n\n";
       it++;
       continue;
       // return false;
