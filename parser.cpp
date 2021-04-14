@@ -60,6 +60,22 @@ bool parseInput(vector<pair<string, int> > &input, map<pair<string, string>, str
     if(s.top() == "`")  s.pop();
     if(checkIfStackEmpty(s, input, it)) return false;
 
+    int stackChanges = 0;
+    while(it < end and s.top() == input[it].first){
+      if(!s.empty()){
+        s.pop();
+        stackChanges = 1;
+        cout << endl << input[it].first << " matched.\n";
+        matched.push_back(input[it].first);
+        it++;
+      } else {
+        cout << "Syntax error: Stack got empty before full input is parsed.\n";
+        return false;
+      }
+    }
+    if(stackChanges)
+      printStackContents(s);
+
     string line = "";
     int flag = 0;
     if(s.top() == "NT6" and tokenAlreadyAdded.find(input[it].first) != tokenAlreadyAdded.end()){
@@ -80,9 +96,10 @@ bool parseInput(vector<pair<string, int> > &input, map<pair<string, string>, str
         }
       }
       if(nextVariable == ""){
-        cout << "\n ******** Syntax error 1: No corresponding entry found in the parse table for " << input[it].first << " in line " << input[it].second <<"\n";
+        cout << "\n ******** Syntax error 1: No corresponding entry at line number " << input[it].second << " found in the parse table for lexeme " << input[it].first <<"\n";
         cout << "Popping top of the stack " << s.top() << "\n";
         s.pop();
+        // cout << "Skipping this input\n\n";
         // it++;
         continue;
         // return false;
@@ -144,7 +161,7 @@ bool parseInput(vector<pair<string, int> > &input, map<pair<string, string>, str
     printStackContents(s);
     if(s.top() == "`")  s.pop();
 
-    int stackChanges = 0;
+    stackChanges = 0;
     while(it < end and s.top() == input[it].first){
       if(!s.empty()){
         s.pop();
@@ -204,6 +221,8 @@ int main(){
   cout << endl;
   if(!parseInput(input, table, otherEntries, tokenAlreadyAdded, matched))
     cout << "\nParsing stopped due to syntax error.\n";
+  else 
+    cout << "\nParsing completed.\n";
   cout << "\nMatched Input: ";
   for (string str:  matched){
     cout << str << " ";
