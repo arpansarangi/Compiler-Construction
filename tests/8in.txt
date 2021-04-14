@@ -1,0 +1,15 @@
+main()
+{
+    int a, b;
+    in(a);
+    in(b);
+    int sum;
+    int mul;
+    int orr;
+    sum = a + b;
+    mul = a * b;
+    orr = a or b;
+    out(sum);
+    out(mul);
+    out(orr);
+}

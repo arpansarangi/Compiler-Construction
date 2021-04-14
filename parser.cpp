@@ -36,36 +36,36 @@ void printStackContents(stack<string> s){
   cout << endl;
 }
 
-bool checkIfStackEmpty(stack<string> &s, vector<string> &input, int it){
+bool checkIfStackEmpty(stack<string> &s, vector<pair<string, int> > &input, int it){
   int end = input.size();
   if(s.empty()){
     cout << "Syntax error: Stack got empty before full input is parsed.\n";
     cout << "Input left to be parsed:\n";
     for(int i=it; i<end; i++){
-      cout << input[i] << " ";
+      cout << input[i].first << " ";
     }
     cout << endl;
     return true;
   }
 }
 
-bool parseInput(vector<string> &input, map<pair<string, string>, string> &table, map<pair<string, string>, vector<string> >  &otherEntries, map <string, int> &tokenAlreadyAdded){
+bool parseInput(vector<pair<string, int> > &input, map<pair<string, string>, string> &table, map<pair<string, string>, vector<string> >  &otherEntries, map <string, int> &tokenAlreadyAdded){
   stack<string> s;
   s.push("S");
-  input.push_back("$");
+  input.push_back(make_pair("$", 0));
   int it = 0, end = input.size();
 
   while(it < end){
     if(checkIfStackEmpty(s, input, it)) return false;
 
     if(it == end-1){
-      if(s.top() == "$" and input[it] == "$"){
+      if(s.top() == "$" and input[it].first == "$"){
         s.pop();
         it++;
         return true;
       }
     }
-    if(input[it] == "`"){
+    if(input[it].first == "`"){
       it++;
       continue;
     }
@@ -75,28 +75,32 @@ bool parseInput(vector<string> &input, map<pair<string, string>, string> &table,
 
     string line = "";
     int flag = 0;
-    if(s.top() == "NT6" and tokenAlreadyAdded.find(input[it]) != tokenAlreadyAdded.end()){
-      for(int i=it; input[i]!=";" and i<end; i++){
-        if(input[i]=="("){
+    if(s.top() == "NT6" and tokenAlreadyAdded.find(input[it].first) != tokenAlreadyAdded.end()){
+      for(int i=it; input[i].first!=";" and i<end; i++){
+        if(input[i].first=="("){
           flag=1;
           break;
         }
       }
       if(flag==0) line = "NT6 ::= expression";
     }
-    if(table.find({s.top(), input[it]}) == table.end() or flag == 1){
+    if(table.find({s.top(), input[it].first}) == table.end() or flag == 1){
       string nextVariable = "";
       for(int i=it; i<end; i++){
-        if(tokenAlreadyAdded.find(input[i]) != tokenAlreadyAdded.end()){
-          nextVariable = input[i];
+        if(tokenAlreadyAdded.find(input[i].first) != tokenAlreadyAdded.end()){
+          nextVariable = input[i].first;
           break;
         }
       }
       if(nextVariable == ""){
-        cout << "Syntax error: No corresponding entry found in the parse table.\n";
-        return false;
+        cout << "\n ******** Syntax error 1: No corresponding entry found in the parse table for " << input[it].first << "\n";
+        cout << "Popping top of the stack " << s.top() << "\n";
+        s.pop();
+        // it++;
+        continue;
+        // return false;
       }
-      for(string i: otherEntries[{s.top(), input[it]}]){
+      for(string i: otherEntries[{s.top(), input[it].first}]){
         int n = nextVariable.length(), n1 = i.length();
         for(int j=0; j<n1-n; j++){
           if((i.substr(j, n+1) == " " + nextVariable) or (i.substr(j, n+1) == nextVariable + " ")){
@@ -110,10 +114,22 @@ bool parseInput(vector<string> &input, map<pair<string, string>, string> &table,
       g:{}
     }
 
-    if(line == "")  line = table[{s.top(), input[it]}];
+    if(line == "")  line = table[{s.top(), input[it].first}];
     if(line == "") {
-      cout << "Syntax error: No corresponding entry found in the parse table.\n";
-      return false;
+      cout << "\n ******** Syntax error 2: No corresponding entry at line number " << input[it].second << " found in the parse table for lexeme " << input[it].first << "\n";
+      cout << "Skipping this input\n";
+      it++;
+      continue;
+      // return false;
+    }
+    if(line == "")  line = table[{s.top(), input[it].first}];
+    if(line == "synch") {
+      cout << "\n ******** Syntax error 3: Synch error at line number " << input[it].second << " found in the parse table for lexeme " << input[it].first << "\n";
+      cout << "Popping top of the stack " << s.top() << "\n";
+      s.pop();
+      // it++;
+      continue;
+      // return false;
     }
     int check=0;
     vector<string> rhs;
@@ -142,11 +158,11 @@ bool parseInput(vector<string> &input, map<pair<string, string>, string> &table,
     if(s.top() == "`")  s.pop();
 
     int stackChanges = 0;
-    while(it < end and s.top() == input[it]){
+    while(it < end and s.top() == input[it].first){
       if(!s.empty()){
         s.pop();
         stackChanges = 1;
-        cout << endl << input[it] << " matched.\n";
+        cout << endl << input[it].first << " matched.\n";
         it++;
       } else {
         cout << "Syntax error: Stack got empty before full input is parsed.\n";
@@ -171,9 +187,10 @@ int main(){
   map<pair<string, string>, vector<string> >  otherEntries;
   T = {"boolean", "int", "float", "{", "}", "(", ")", "+", "-", "*", ">", "<", "==", "and", "or", "if", "while"};
   map <string, int> tokenAlreadyAdded;
-  vector<string> input;
+  vector<pair<string, int> > input;
   for(token t: listOfTokens){
-    input.push_back(t.lexeme);
+    // cout << t.line_no << "\n";
+    input.push_back(make_pair(t.lexeme, t.line_no));
     if((t.token_no == 200 or t.token_no == 102) and tokenAlreadyAdded[t.lexeme] == 0) {
       T.push_back(t.lexeme);
       tokenAlreadyAdded[t.lexeme] = 1;
@@ -187,9 +204,13 @@ int main(){
   //   cout<<i.first<<" ";
   // }
   // cout<<endl;
+// for(pair<int,int> it2:v){
+//     cout<<"Car "<<it2.first<<" , "<<it2.second<<endl;
+// }
+
   cout << "\nInput to parser: ";
-  for(string i: input){
-    cout << i << " ";
+  for(pair<string,int> it: input){
+    cout << it.first << " ";
   }
   cout << endl;
   if(!parseInput(input, table, otherEntries, tokenAlreadyAdded))

@@ -31,17 +31,24 @@ void editTableForVariables(map<pair<string, string>, string> &table, string vari
     // cout << "\nCurrent variable: " << variable;
     table[{"statements", variable}] = "statements ::= statement NT3";
 
-    table[{"statement", variable}] = "statement ::= " + variable + " := NT6";
-
-    table[{"argCallingList", variable}] = "argCallingList ::= " + variable + " NT7";
-
     table[{"NT6", variable}] = "NT6 ::= expression";
 
     table[{"expression", variable}] = "expression ::= " + variable + " NT5";
 
+    // adding synch 
+    table[{"type", variable}] = "synch";
+    table[{"arithmeticOperator", variable}] = "synch";
+    table[{"relationalOperator", variable}] = "synch";
+    table[{"logicalOperator", variable}] = "synch";
+
     if(token_no == 200) {
+        table[{"statement", variable}] = "statement ::= " + variable + " := NT6";
+        table[{"argCallingList", variable}] = "argCallingList ::= " + variable + " NT7";
         table[{"NT6", variable}] = "NT6 ::= " + variable + " ( argCallingList )";
         table[{"varlist", variable}] = "varlist ::= " + variable + " NT4";
+
+        
+        
     }
 }
 
@@ -139,6 +146,52 @@ map<pair<string, string>, string> makeTable(){
     table[{"conditional", "if"}] = "conditional ::= if ( expression relationalOperator expression ) { statements }";
 
     table[{"loop", "while"}] = "loop ::= while ( expression relationalOperator expression ) { statements }";
+
+    // adding follows set entries for synch error check
+    table[{"program", "$"}] = "synch";
+    table[{"functions", "main"}] = "synch";
+    table[{"function", "main"}] = "synch";
+    table[{"returnStatement", "}"}] = "synch";
+    table[{"arg", ")"}] = "synch";
+    table[{"arg", ","}] = "synch";
+    table[{"type", "functionName"}] = "synch";
+    table[{"type", "variable"}] = "synch";
+    table[{"MAIN", "$"}] = "synch";
+    table[{"statement", "return"}] = "synch";
+    table[{"statement", "}"}] = "synch";
+    table[{"statement", ";"}] = "synch";
+    table[{"NT6", "return"}] = "synch";
+    table[{"NT6", "}"}] = "synch";
+    table[{"NT6", ";"}] = "synch";
+    table[{"input", "return"}] = "synch";
+    table[{"input", "}"}] = "synch";
+    table[{"input", ";"}] = "synch";
+    table[{"output", "return"}] = "synch";
+    table[{"output", "}"}] = "synch";
+    table[{"output", ";"}] = "synch";
+    table[{"declaration", "return"}] = "synch";
+    table[{"declaration", "}"}] = "synch";
+    table[{"declaration", ";"}] = "synch";
+    table[{"varlist", "return"}] = "synch";
+    table[{"varlist", "}"}] = "synch";
+    table[{"varlist", ";"}] = "synch";
+    table[{"expression", "return"}] = "synch";
+    table[{"expression", "}"}] = "synch";
+    table[{"expression", ";"}] = "synch";
+    table[{"expression", ")"}] = "synch";
+    table[{"expression", "<"}] = "synch";
+    table[{"expression", ">"}] = "synch";
+    table[{"expression", "=="}] = "synch";
+    table[{"arithmeticOperator", "variable"}] = "synch";
+    table[{"relationalOperator", "variable"}] = "synch";
+    table[{"logicalOperator", "variable"}] = "synch";
+    table[{"conditional", "return"}] = "synch";
+    table[{"conditional", "}"}] = "synch";
+    table[{"conditional", ";"}] = "synch";
+    table[{"loop", "return"}] = "synch";
+    table[{"loop", "}"}] = "synch";
+    table[{"loop", ";"}] = "synch";
+    
 
     return table;
 
