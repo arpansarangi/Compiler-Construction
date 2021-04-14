@@ -6,9 +6,9 @@ main()
     int sum;
     int mul;
     int orr;
-    sum = a + b;
-    mul = a * b;
-    orr = a or b;
+    sum := a + b;
+    mul := a * b;
+    orr := a or b;
     out(sum);
     out(mul);
     out(orr);
