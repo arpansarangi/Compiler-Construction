@@ -49,7 +49,7 @@ bool checkIfStackEmpty(stack<string> &s, vector<pair<string, int> > &input, int 
   }
 }
 
-bool parseInput(vector<pair<string, int> > &input, map<pair<string, string>, string> &table, map<pair<string, string>, vector<string> >  &otherEntries, map <string, int> &tokenAlreadyAdded){
+bool parseInput(vector<pair<string, int> > &input, map<pair<string, string>, string> &table, map<pair<string, string>, vector<string> >  &otherEntries, map <string, int> &tokenAlreadyAdded, vector<string> &matched){
   stack<string> s;
   s.push("S");
   input.push_back(make_pair("$", 0));
@@ -163,6 +163,7 @@ bool parseInput(vector<pair<string, int> > &input, map<pair<string, string>, str
         s.pop();
         stackChanges = 1;
         cout << endl << input[it].first << " matched.\n";
+        matched.push_back(input[it].first);
         it++;
       } else {
         cout << "Syntax error: Stack got empty before full input is parsed.\n";
@@ -183,6 +184,7 @@ bool parseInput(vector<pair<string, int> > &input, map<pair<string, string>, str
 
 int main(){
   int lexer = scan();
+  vector<string> matched;
   map<pair<string, string>, string>   table = makeTable();
   map<pair<string, string>, vector<string> >  otherEntries;
   T = {"boolean", "int", "float", "{", "}", "(", ")", "+", "-", "*", ">", "<", "==", "and", "or", "if", "while"};
@@ -213,7 +215,12 @@ int main(){
     cout << it.first << " ";
   }
   cout << endl;
-  if(!parseInput(input, table, otherEntries, tokenAlreadyAdded))
+  if(!parseInput(input, table, otherEntries, tokenAlreadyAdded, matched))
     cout << "\nParsing stopped due to syntax error.\n";
+  cout << "\nMatched Input: ";
+  for (string str:  matched){
+    cout << str << " ";
+  }
+  cout << "\n";
   return 0;
 }
