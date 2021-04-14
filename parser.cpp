@@ -1,5 +1,4 @@
 #include "parser.h"
-#include "makeParseTable.h"
 #include <iostream> 
 #include <string> 
 #include <sstream> 
@@ -14,18 +13,6 @@ using namespace std;
 vector <string> T;
 const vector <string> NT = {"program", "functions", "function", "returnStatement", "argList", "arg", "type", "MAIN", "statements", "statement", "input", "output", "declaration", "varlist", "expression", "arithmeticOperator", "relationalOperator", "logicalOperator", "conditional", "loop", "NT1", "NT2", "NT3", "NT4", "NT5", "NT6"};
 
- // read input from a file and construct
-grammar makeGrammar(string fname){
-   
-}
-
-void makeParseTree(string lexerOutputFile, parseTable T, grammar G){
-    
-}
-
-void PrintParseTree(parseTree* head){
-
-}
 
 void printStackContents(stack<string> s){
   cout << "Stack contents:\t";
@@ -93,7 +80,7 @@ bool parseInput(vector<pair<string, int> > &input, map<pair<string, string>, str
         }
       }
       if(nextVariable == ""){
-        cout << "\n ******** Syntax error 1: No corresponding entry found in the parse table for " << input[it].first << "\n";
+        cout << "\n ******** Syntax error 1: No corresponding entry found in the parse table for " << input[it].first << " in line " << input[it].second <<"\n";
         cout << "Popping top of the stack " << s.top() << "\n";
         s.pop();
         // it++;

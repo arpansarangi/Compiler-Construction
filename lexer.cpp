@@ -215,8 +215,8 @@ void getDelimiter(string line, int *pos, int lineNumber){
 int scan(){
   ifstream fin;
   ofstream fout;
-  fin.open("tests/11in.txt");
-  fout.open("tests/11out-lexer.txt");
+  fin.open("tests/1in.txt");
+  fout.open("tests/1out-lexer.txt");
   string line;
   int lineNumber = 0;
   while (getline(fin, line)) { 
